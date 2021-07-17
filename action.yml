@@ -1,5 +1,8 @@
 name: 'Wait Action'
-description: 'Wait for workflows to complete'
+description: 'Wait and run a workflow after all other workflows are completed'
+branding:
+  icon: 'aperture'
+  color: 'blue'
 inputs:
   access_token:
     description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
