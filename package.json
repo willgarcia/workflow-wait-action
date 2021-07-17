@@ -1,5 +1,5 @@
 {
-  "name": "workflow-wait",
+  "name": "workflow-wait-action",
   "version": "0.1.0",
   "main": "dist/index.js",
   "author": "William Garcia <garcia.rodriguez.william@gmail.com>",
@@ -11,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/willgarcia/workflow-wait.git"
+    "url": "git+https://github.com/willgarcia/workflow-wait-action.git"
   },
   "scripts": {
     "build": "ncc build src/index.ts --license LICENSES.txt && git add dist/",

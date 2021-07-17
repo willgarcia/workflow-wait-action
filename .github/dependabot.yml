@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: workflow-wait
+  - package-ecosystem: workflow-wait-action
     directory: /
     schedule:
       interval: daily

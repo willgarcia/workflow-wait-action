@@ -1,6 +1,6 @@
 # Wait for workflows Github Action
 
-![Build status](https://github.com/willgarcia/workflow-wait/workflows/build-test/badge.svg)
+![Build status](https://github.com/willgarcia/workflow-wait-action/workflows/build-test/badge.svg)
 
 A GitHub Action that waits for workflows in progress to complete before resuming and running a parent workflow.
 
@@ -35,7 +35,7 @@ jobs:
   always_last:
     steps:
       - name: Pause until all workflows are completed
-        uses: willgarcia/workflow-wait@v0.1.0
+        uses: willgarcia/workflow-wait-action@v0.1.0
 
       - name: Resume and run once, after all workflows are completed
         run: date
@@ -50,7 +50,7 @@ jobs:
   always_last:
     steps:
       - name: Pause until all workflows are completed
-        uses: willgarcia/workflow-wait@v0.1.0
+        uses: willgarcia/workflow-wait-action@v0.1.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
           timeout: 600
@@ -63,12 +63,12 @@ jobs:
 
 ## Options
 
-| Syntax        | Description                                                                                                              | Mandatory? | Default value           |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------- | ----------------------- |
-| access_token  | Your GitHub Access Token                                                                                                 | No         | `{{ github.token }}`    |
-| timeout       | Action timeout. If in-progress workflows are not completed within the timeout period, the Action will fails the workflow | No         |                         |
-| interval      | Interval used to poll the status of the workflows                                                                        | No         |                         |
-| initial_delay | Initial delay used to give minimal time to all workflows to be queued & started                                          | No         |                         |
+| Syntax        | Description                                                                                                              | Mandatory? | Default value        |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------- | -------------------- |
+| access_token  | Your GitHub Access Token                                                                                                 | No         | `{{ github.token }}` |
+| timeout       | Action timeout. If in-progress workflows are not completed within the timeout period, the Action will fails the workflow | No         |                      |
+| interval      | Interval used to poll the status of the workflows                                                                        | No         |                      |
+| initial_delay | Initial delay used to give minimal time to all workflows to be queued & started                                          | No         |                      |
 
 ## Limitations
 
