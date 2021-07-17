@@ -1,4 +1,4 @@
-name: 'Wait Action'
+name: 'Workflow Wait Action'
 description: 'Wait and run a workflow after all other workflows are completed'
 branding:
   icon: 'aperture'
