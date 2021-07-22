@@ -6312,9 +6312,9 @@ var ActionStatus;
 })(ActionStatus || (ActionStatus = {}));
 const config = () => {
     const config = {
-        timeout: parseInt(core.getInput("timeout")),
-        interval: parseInt(core.getInput("interval")),
-        initial_delay: parseInt(core.getInput("initial_delay")),
+        timeout: parseInt(core.getInput('timeout')),
+        interval: parseInt(core.getInput('interval')),
+        initial_delay: parseInt(core.getInput('initial_delay')),
     };
     const info = [
         `Action configuration:`,
@@ -6322,8 +6322,8 @@ const config = () => {
         `${config.interval}s interval,`,
         `${config.timeout}s timeout`,
     ];
-    core.info(info.join(" "));
-    core.info("");
+    core.info(info.join(' '));
+    core.info('');
     return config;
 };
 
@@ -6334,8 +6334,10 @@ var github = __nccwpck_require__(438);
 
 
 const getGithubWorkflows = async () => {
-    const client = github.getOctokit(core.getInput("access_token", { required: true }));
-    return client.request(`GET /repos/{owner}/{repo}/actions/runs`, github.context.repo);
+    const client = github.getOctokit(core.getInput('access_token', { required: true }));
+    return Promise.all(['queued', 'in_progress']
+        .map((status) => status)
+        .map((status) => client.request(`GET /repos/{owner}/{repo}/actions/runs`, { ...github.context.repo, status })));
 };
 const filterGithubWorkflows = async () => {
     const { payload, sha } = github.context;
@@ -6346,9 +6348,32 @@ const filterGithubWorkflows = async () => {
     else if (payload.workflow_run) {
         currentSHA = payload.workflow_run.head_sha;
     }
-    return (await getGithubWorkflows()).data.workflow_runs.filter((run) => run.id !== Number(process.env.GITHUB_RUN_ID) &&
-        run.status !== "completed" &&
-        run.head_sha === currentSHA);
+    const workflows = await getGithubWorkflows();
+    const workflowsInput = core.getMultilineInput('workflows', {
+        required: false,
+    });
+    core.info(JSON.stringify(workflowsInput));
+    return workflows
+        .flatMap((response) => response.data.workflow_runs)
+        .filter((run) => run.id !== Number(process.env.GITHUB_RUN_ID) &&
+        run.status !== 'completed' &&
+        run.head_sha === currentSHA)
+        .filter((run) => {
+        if (!run.name) {
+            throw Error(`Workflow name not found for run ${JSON.stringify(run)}`);
+        }
+        if (workflowsInput.length > 0) {
+            return workflowsInput.includes(run.name);
+        }
+        return workflowsInput.length === 0;
+    });
+};
+const logGithubWorkflows = (retries, workflows) => {
+    core.info(`Retry #${retries} - ${workflows.length} ${workflows.length > 1 ? 'workflows' : 'workflow'} in progress found. Please, wait until completion or consider cancelling these workflows manually:`);
+    workflows.map((workflow) => {
+        core.info(`* ${workflow.name}: ${workflow.status}`);
+    });
+    core.info('');
 };
 
 
@@ -6361,7 +6386,7 @@ const wait = async (ms) => {
     return new Promise(promise);
 };
 const delay = (interval) => wait(interval * oneSecond);
-const poll = async (options) => {
+const poll = async (options, log) => {
     let now = new Date().getTime();
     const end = now + options.timeout * oneSecond;
     let retries = 1;
@@ -6370,11 +6395,7 @@ const poll = async (options) => {
         if (workflows.length === 0) {
             return ActionStatus.WORKFLOWS_AWAITED_OK;
         }
-        core.info(`Retry #${retries} - ${workflows.length} ${workflows.length > 1 ? "workflows" : "workflow"} in progress found. Please, wait until completion or consider cancelling these workflows manually:`);
-        workflows.map((workflow) => {
-            core.info(`* ${workflow.name}: ${workflow.status}`);
-        });
-        core.info("");
+        log(retries, workflows);
         await delay(options.interval);
         now = new Date().getTime();
         retries++;
@@ -6388,13 +6409,14 @@ const poll = async (options) => {
 
 
 
+
 async function main() {
     const { initial_delay, timeout, interval } = config();
     await delay(initial_delay);
-    await poll({ timeout, interval });
+    await poll({ timeout, interval }, logGithubWorkflows);
 }
 main()
-    .then(() => core.info("👌 Previous Github workflows completed. Resuming..."))
+    .then(() => core.info('👌 Previous Github workflows completed. Resuming...'))
     .catch((e) => core.setFailed(e.message));
 
 })();

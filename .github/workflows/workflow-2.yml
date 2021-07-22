@@ -11,7 +11,7 @@ jobs:
   workflow_2:
     runs-on: ubuntu-latest
     steps:
-      - name: Workflow 2
+      - name: Workflow 2 Test
         shell: bash
         run: |
           sleep 45
