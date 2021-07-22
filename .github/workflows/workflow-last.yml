@@ -1,10 +1,5 @@
 name: workflow-last
 
-on:
-  push:
-    branches:
-      - main
-
 jobs:
   workflow_last:
     runs-on: ubuntu-latest
@@ -14,7 +9,7 @@ jobs:
 
       - name: Pause until all workflows are completed
         uses: ./
-        with: 
+        with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
           timeout: 60
           interval: 10
