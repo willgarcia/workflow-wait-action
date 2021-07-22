@@ -2,6 +2,8 @@ name: workflow-2
 
 on:
   push:
+    branches:
+      - main
     paths:
       - .github/workflows/workflow-2.yml
 
