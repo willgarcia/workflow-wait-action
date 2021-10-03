@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - release/0.2.0
     paths:
       - .github/workflows/workflow-1.yml
 
@@ -11,7 +12,7 @@ jobs:
   workflow_1:
     runs-on: ubuntu-latest
     steps:
-      - name: Workflow 1
+      - name: Workflow 1 Test
         shell: bash
         run: |
           sleep 15

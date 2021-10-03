@@ -7,7 +7,7 @@ inputs:
   access_token:
     description: 'Your GitHub Access Token, defaults to: {{ github.token }}'
     default: '${{ github.token }}'
-    required: true
+    required: false
   timeout:
     description: 'Action timeout. If in-progress workflows are not completed within the timeout period, the Action will fails the workflow'
     default: '600'
@@ -19,6 +19,10 @@ inputs:
   initial_delay:
     description: 'Initial delay used to give minimal time to all workflows to be queued & started'
     default: '30'
+    required: false
+  workflows:
+    description: 'List of workflows to wait for. Must be a multiline string using |'
+    default: ''
     required: false
 
 runs:

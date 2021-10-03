@@ -63,12 +63,13 @@ jobs:
 
 ## Options
 
-| Syntax        | Description                                                                                                              | Mandatory? | Default value        |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------- | -------------------- |
-| access_token  | Your GitHub Access Token                                                                                                 | No         | `{{ github.token }}` |
-| timeout       | Action timeout. If in-progress workflows are not completed within the timeout period, the Action will fails the workflow | No         |                      |
-| interval      | Interval used to poll the status of the workflows                                                                        | No         |                      |
-| initial_delay | Initial delay used to give minimal time to all workflows to be queued & started                                          | No         |                      |
+| Syntax        | Description                                                                                                              | Mandatory? | Default value        | Example value                     |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------- | -------------------- | --------------------------------- |
+| access_token  | Your GitHub Access Token                                                                                                 | No         | `{{ github.token }}` |                                   |
+| timeout       | Action timeout. If in-progress workflows are not completed within the timeout period, the Action will fails the workflow | No         | 600                  |                                   |
+| interval      | Interval used to poll the status of the workflows                                                                        | No         | 10                   |                                   |
+| initial_delay | Initial delay used to give minimal time to all workflows to be queued & started                                          | No         | 30                   |                                   |
+| workflows     | List of workflows to wait for. Must be a multiline string using                                                          | No         | ''                   | \| <br/>workflow-1<br/>workflow-2 |
 
 ## Limitations
 

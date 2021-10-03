@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - release/0.2.0
 
 jobs:
   workflow_last:
@@ -19,6 +20,8 @@ jobs:
           timeout: 60
           interval: 10
           initial_delay: 5
+          workflows: |
+            workflow-1
 
       - name: Resume and run once, after all workflows are completed
         run: date
